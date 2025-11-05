@@ -65,10 +65,8 @@ async function main() {
 
     const jsAlgorithm = algorithmMap[algorithm] || algorithm;
 
-    // Prepare options
-    const options = {
-        ditheringType: 'errorDiffusion',
-        errorDiffusionMatrix: jsAlgorithm,
+    // Prepare options based on algorithm type
+    let options = {
         palette: palette,
         serpentine: false
     };
@@ -81,6 +79,10 @@ async function main() {
         options.randomDitheringType = algorithm === 'random-bw' ? 'blackAndWhite' : 'rgb';
     } else if (algorithm === 'none') {
         options.ditheringType = 'quantizationOnly';
+    } else {
+        // Error diffusion algorithms
+        options.ditheringType = 'errorDiffusion';
+        options.errorDiffusionMatrix = jsAlgorithm;
     }
 
     console.log('Dithering with JS...');
