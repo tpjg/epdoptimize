@@ -1,6 +1,9 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e
+
+# Ensure we use bash 4+ features or fallback to simpler approach
+BASH_VERSION_MAJOR="${BASH_VERSION%%.*}"
 
 RUST_BIN="./epd-dither/target/release/epd-dither"
 JS_SCRIPT="./compare_with_js.js"
@@ -69,10 +72,14 @@ if command -v compare &> /dev/null; then
 fi
 
 failed_tests=()
-declare -A rust_times
-declare -A js_times
-declare -A differences
 
+# Use simple arrays instead of associative arrays for compatibility
+rust_times=()
+js_times=()
+differences=()
+algo_names=()
+
+idx=0
 for algo in "${algorithms[@]}"; do
     echo "========================================"
     echo "Testing: $algo"
@@ -84,11 +91,10 @@ for algo in "${algorithms[@]}"; do
 
     # Run Rust version
     echo "→ Running Rust version..."
-    rust_start=$(date +%s%N)
+    rust_start=$(date +%s%N 2>/dev/null || python3 -c "import time; print(int(time.time() * 1000000000))")
     if $RUST_BIN -i "$TEST_IMAGE" -o "$rust_output" -a "$algo" -p "$PALETTE" 2>/dev/null; then
-        rust_end=$(date +%s%N)
+        rust_end=$(date +%s%N 2>/dev/null || python3 -c "import time; print(int(time.time() * 1000000000))")
         rust_time=$((($rust_end - $rust_start) / 1000000)) # Convert to milliseconds
-        rust_times[$algo]=$rust_time
 
         # Verify Rust output
         if [ ! -f "$rust_output" ]; then
@@ -107,11 +113,10 @@ for algo in "${algorithms[@]}"; do
 
     # Run JavaScript version
     echo "→ Running JavaScript version (bun)..."
-    js_start=$(date +%s%N)
+    js_start=$(date +%s%N 2>/dev/null || python3 -c "import time; print(int(time.time() * 1000000000))")
     if bun run "$JS_SCRIPT" "$TEST_IMAGE" "$js_output" "$algo" "$PALETTE" 2>&1 | grep -v "Debugger" | tail -5; then
-        js_end=$(date +%s%N)
+        js_end=$(date +%s%N 2>/dev/null || python3 -c "import time; print(int(time.time() * 1000000000))")
         js_time=$((($js_end - $js_start) / 1000000)) # Convert to milliseconds
-        js_times[$algo]=$js_time
 
         # Verify JS output
         if [ ! -f "$js_output" ]; then
@@ -128,28 +133,34 @@ for algo in "${algorithms[@]}"; do
         continue
     fi
 
+    # Store results using indexed arrays
+    algo_names[$idx]="$algo"
+    rust_times[$idx]=$rust_time
+    js_times[$idx]=$js_time
+
     # Compare outputs with ImageMagick if available
     if [ "$HAS_IMAGEMAGICK" = true ] && [ "$algo" != "random-rgb" ] && [ "$algo" != "random-bw" ]; then
         echo "→ Comparing outputs..."
-        if compare -metric RMSE "$rust_output" "$js_output" "$diff_output" 2>&1 | head -1; then
+        if rmse_output=$(compare -metric RMSE "$rust_output" "$js_output" "$diff_output" 2>&1 | head -1); then
             # Extract RMSE value
-            rmse=$(compare -metric RMSE "$rust_output" "$js_output" "$diff_output" 2>&1 | awk '{print $1}' | cut -d'(' -f1)
-            differences[$algo]=$rmse
+            rmse=$(echo "$rmse_output" | awk '{print $1}' | cut -d'(' -f1)
+            differences[$idx]=$rmse
             echo "  RMSE difference: $rmse"
         fi
     else
         if [ "$algo" = "random-rgb" ] || [ "$algo" = "random-bw" ]; then
             echo "  ⊘ Skipping comparison (random algorithm)"
-            differences[$algo]="N/A (random)"
+            differences[$idx]="N/A"
         fi
     fi
 
     # Calculate speedup
-    if [ ${rust_times[$algo]} -gt 0 ]; then
-        speedup=$(echo "scale=1; ${js_times[$algo]} / ${rust_times[$algo]}" | bc)
+    if [ $rust_time -gt 0 ]; then
+        speedup=$(echo "scale=1; $js_time / $rust_time" | bc)
         echo "  ⚡ Speedup: ${speedup}x faster"
     fi
 
+    idx=$((idx + 1))
     echo ""
 done
 
@@ -165,10 +176,10 @@ echo "Performance Comparison:"
 echo "----------------------------------------"
 printf "%-20s %10s %10s %8s\n" "Algorithm" "Rust (ms)" "JS (ms)" "Speedup"
 echo "----------------------------------------"
-for algo in "${algorithms[@]}"; do
-    if [ -n "${rust_times[$algo]}" ] && [ -n "${js_times[$algo]}" ]; then
-        speedup=$(echo "scale=1; ${js_times[$algo]} / ${rust_times[$algo]}" | bc)
-        printf "%-20s %10s %10s %7sx\n" "$algo" "${rust_times[$algo]}" "${js_times[$algo]}" "$speedup"
+for i in "${!algo_names[@]}"; do
+    if [ -n "${rust_times[$i]}" ] && [ -n "${js_times[$i]}" ]; then
+        speedup=$(echo "scale=1; ${js_times[$i]} / ${rust_times[$i]}" | bc)
+        printf "%-20s %10s %10s %7sx\n" "${algo_names[$i]}" "${rust_times[$i]}" "${js_times[$i]}" "$speedup"
     fi
 done
 echo "----------------------------------------"
@@ -176,9 +187,9 @@ echo "----------------------------------------"
 # Calculate average speedup
 total_speedup=0
 count=0
-for algo in "${algorithms[@]}"; do
-    if [ -n "${rust_times[$algo]}" ] && [ -n "${js_times[$algo]}" ]; then
-        speedup=$(echo "scale=2; ${js_times[$algo]} / ${rust_times[$algo]}" | bc)
+for i in "${!rust_times[@]}"; do
+    if [ -n "${rust_times[$i]}" ] && [ -n "${js_times[$i]}" ]; then
+        speedup=$(echo "scale=2; ${js_times[$i]} / ${rust_times[$i]}" | bc)
         total_speedup=$(echo "$total_speedup + $speedup" | bc)
         count=$((count + 1))
     fi
@@ -195,9 +206,9 @@ if [ "$HAS_IMAGEMAGICK" = true ]; then
     echo "----------------------------------------"
     printf "%-20s %15s\n" "Algorithm" "RMSE"
     echo "----------------------------------------"
-    for algo in "${algorithms[@]}"; do
-        if [ -n "${differences[$algo]}" ]; then
-            printf "%-20s %15s\n" "$algo" "${differences[$algo]}"
+    for i in "${!algo_names[@]}"; do
+        if [ -n "${differences[$i]}" ]; then
+            printf "%-20s %15s\n" "${algo_names[$i]}" "${differences[$i]}"
         fi
     done
     echo "----------------------------------------"
