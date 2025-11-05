@@ -53,14 +53,43 @@ if [ ! -f "$TEST_IMAGE" ]; then
     exit 1
 fi
 
-if ! command -v bun &> /dev/null; then
-    echo "ERROR: bun not found. Please install bun first."
+# Detect JS runtime (prefer bun, fallback to node)
+JS_RUNTIME=""
+if command -v bun &> /dev/null; then
+    JS_RUNTIME="bun run"
+    echo "Using bun for JavaScript execution"
+elif command -v node &> /dev/null; then
+    JS_RUNTIME="node"
+    echo "Using node for JavaScript execution"
+else
+    echo "ERROR: Neither bun nor node found. Please install one of them."
     exit 1
 fi
 
 if [ ! -f "$JS_SCRIPT" ]; then
     echo "ERROR: JS comparison script not found at $JS_SCRIPT"
     exit 1
+fi
+
+# Check if canvas is installed
+if ! $JS_RUNTIME -e "require('canvas')" 2>/dev/null; then
+    echo ""
+    echo "WARNING: canvas package not found!"
+    echo "The JS comparison requires the canvas package."
+    echo ""
+    echo "To install it:"
+    echo "  npm install canvas"
+    echo "or:"
+    echo "  bun install canvas"
+    echo ""
+    echo "For more details, see: INSTALL_CANVAS.md"
+    echo ""
+    read -p "Continue with Rust-only testing? (y/n) " -n 1 -r
+    echo
+    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+        exit 1
+    fi
+    SKIP_JS=true
 fi
 
 # Check if ImageMagick is available for comparison
@@ -111,10 +140,17 @@ for algo in "${algorithms[@]}"; do
         continue
     fi
 
-    # Run JavaScript version
-    echo "→ Running JavaScript version (bun)..."
+    # Run JavaScript version (if not skipped)
+    if [ "$SKIP_JS" = true ]; then
+        echo "→ Skipping JavaScript version (canvas not installed)"
+        idx=$((idx + 1))
+        echo ""
+        continue
+    fi
+
+    echo "→ Running JavaScript version..."
     js_start=$(date +%s%N 2>/dev/null || python3 -c "import time; print(int(time.time() * 1000000000))")
-    if bun run "$JS_SCRIPT" "$TEST_IMAGE" "$js_output" "$algo" "$PALETTE" 2>&1 | grep -v "Debugger" | tail -5; then
+    if $JS_RUNTIME "$JS_SCRIPT" "$TEST_IMAGE" "$js_output" "$algo" "$PALETTE" 2>&1 | grep -v "Debugger" | tail -5; then
         js_end=$(date +%s%N 2>/dev/null || python3 -c "import time; print(int(time.time() * 1000000000))")
         js_time=$((($js_end - $js_start) / 1000000)) # Convert to milliseconds
 
