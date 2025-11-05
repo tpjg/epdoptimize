@@ -35,7 +35,7 @@ echo "=========================================="
 echo "Rust vs JavaScript Dithering Comparison"
 echo "=========================================="
 echo "Rust binary: $RUST_BIN"
-echo "JS script: $JS_SCRIPT (using bun)"
+echo "JS script: $JS_SCRIPT (using Node.js)"
 echo "Test image: $TEST_IMAGE"
 echo "Palette: $PALETTE"
 echo "Output directory: $OUTPUT_DIR"
@@ -53,18 +53,14 @@ if [ ! -f "$TEST_IMAGE" ]; then
     exit 1
 fi
 
-# Detect JS runtime (prefer bun, fallback to node)
-JS_RUNTIME=""
-if command -v bun &> /dev/null; then
-    JS_RUNTIME="bun run"
-    echo "Using bun for JavaScript execution"
-elif command -v node &> /dev/null; then
-    JS_RUNTIME="node"
-    echo "Using node for JavaScript execution"
-else
-    echo "ERROR: Neither bun nor node found. Please install one of them."
+# Use node for JS runtime (bun doesn't support canvas native module well)
+JS_RUNTIME="node"
+if ! command -v node &> /dev/null; then
+    echo "ERROR: node not found. Please install Node.js."
+    echo "The comparison script requires Node.js (not bun) due to native canvas module."
     exit 1
 fi
+echo "Using node for JavaScript execution (canvas requires Node.js)"
 
 if [ ! -f "$JS_SCRIPT" ]; then
     echo "ERROR: JS comparison script not found at $JS_SCRIPT"
@@ -79,8 +75,9 @@ if ! $JS_RUNTIME -e "require('canvas')" 2>/dev/null; then
     echo ""
     echo "To install it:"
     echo "  npm install canvas"
-    echo "or:"
-    echo "  bun install canvas"
+    echo ""
+    echo "Note: On macOS you may need system dependencies first:"
+    echo "  brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman"
     echo ""
     echo "For more details, see: INSTALL_CANVAS.md"
     echo ""
@@ -90,7 +87,10 @@ if ! $JS_RUNTIME -e "require('canvas')" 2>/dev/null; then
         exit 1
     fi
     SKIP_JS=true
+else
+    echo "✓ canvas package found"
 fi
+echo ""
 
 # Check if ImageMagick is available for comparison
 HAS_IMAGEMAGICK=false
