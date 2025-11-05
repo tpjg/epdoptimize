@@ -1,6 +1,6 @@
 //! Error diffusion matrices and kernel definitions
 
-use super::ErrorDiffusionKernel;
+use crate::dither::ErrorDiffusionKernel;
 
 /// An error diffusion matrix entry
 #[derive(Debug, Clone, Copy)]

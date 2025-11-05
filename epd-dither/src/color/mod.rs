@@ -7,7 +7,7 @@ pub mod palette;
 pub use palette::Palette;
 
 /// RGB color (8-bit per channel)
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
 pub struct Rgb(pub [u8; 3]);
 
 impl Rgb {
@@ -33,7 +33,7 @@ impl Rgb {
 }
 
 /// RGBA color (8-bit per channel including alpha)
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, serde::Serialize, serde::Deserialize)]
 pub struct Rgba(pub [u8; 4]);
 
 impl Rgba {
