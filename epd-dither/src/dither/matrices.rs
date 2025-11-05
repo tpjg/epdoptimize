@@ -114,7 +114,7 @@ const JARVIS: [DiffusionEntry; 12] = [
     },
     DiffusionEntry {
         offset: [0, 2],
-        factor: 4.0 / 48.0,
+        factor: 5.0 / 48.0,
     },
     DiffusionEntry {
         offset: [1, 2],

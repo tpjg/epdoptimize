@@ -109,8 +109,7 @@ mod tests {
 
         // Just verify it doesn't panic and produces valid RGB values
         let result = apply_ordered_dither(pixel, 0, 0, &matrix, 64.0);
-        assert!(result[0] <= 255);
-        assert!(result[1] <= 255);
-        assert!(result[2] <= 255);
+        // Result is u8, so always valid (no need to assert <= 255)
+        assert!(result.len() == 3);
     }
 }

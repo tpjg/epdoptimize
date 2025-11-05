@@ -55,7 +55,7 @@ mod tests {
     fn test_euclidean_distance() {
         let black = Rgb::new(0, 0, 0);
         let white = Rgb::new(255, 255, 255);
-        let red = Rgb::new(255, 0, 0);
+        let _red = Rgb::new(255, 0, 0);
 
         // Distance between same colors should be 0
         assert_eq!(euclidean_distance(&black, &black), 0.0);
