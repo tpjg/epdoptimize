@@ -2,7 +2,11 @@
 
 [Interactive demo](https://utzel-butzel.github.io/epdoptimize/) 📦📦 📦
 
-A JavaScript library for reducing image colors and dithering them to fit (color) eInk displays for better visual quality.
+A library and CLI tool for reducing image colors and dithering them to fit (color) eInk displays for better visual quality.
+
+Available in two implementations:
+- **JavaScript/TypeScript**: NPM library for use in web applications and Node.js
+- **Rust**: High-performance CLI tool for batch processing and server-side use
 
 ### Why?
 
@@ -34,11 +38,38 @@ You can easily add your own displays and use custom color tables.
 
 ## Installation
 
+### JavaScript/TypeScript (NPM)
+
 ```bash
 npm install epdoptimize
 ```
 
-## Usage Example
+### Rust CLI
+
+The Rust implementation provides a standalone CLI tool for high-performance image processing.
+
+#### Building from Source
+
+```bash
+cd epd-dither
+cargo build --release
+```
+
+The optimized binary will be located at `./target/release/epd-dither`
+
+#### Release Build Optimizations
+
+The Rust implementation is configured for maximum performance with:
+- Full optimization (`opt-level = 3`)
+- Link-time optimization (LTO)
+- Single codegen unit for better inlining
+- Stripped debug symbols
+
+Expected binary size: 3-5 MB (standalone, no runtime required)
+
+## Usage Examples
+
+### JavaScript/TypeScript
 
 ```html
 <canvas id="inputCanvas" />
@@ -73,7 +104,54 @@ const prepared = replaceColors(ditheredCanvas,ditheredCanvasWithDeviceColors {
 
 ```
 
-## Dithering Options
+### Rust CLI
+
+#### Basic Usage
+
+```bash
+# Dither an image with default settings (Floyd-Steinberg, black & white)
+epd-dither -i photo.jpg -o photo-dithered.png
+
+# Use Spectra 6 palette
+epd-dither -i photo.jpg -o photo-dithered.png -p spectra6
+
+# Use Jarvis algorithm with serpentine scanning
+epd-dither -i photo.jpg -o output.png -a jarvis --serpentine
+
+# Ordered dithering with 8x8 Bayer matrix
+epd-dither -i photo.jpg -o output.png -a ordered --bayer-size 8x8
+
+# Custom palette
+epd-dither -i logo.png -o logo-out.png -c "#000000,#ffffff,#ff0000"
+
+# List available palettes
+epd-dither --list-palettes
+```
+
+#### Available Algorithms
+
+- `floyd-steinberg` (default) - Classic error diffusion
+- `false-floyd-steinberg` - Simplified Floyd-Steinberg
+- `jarvis` - Jarvis, Judice, and Ninke
+- `stucki` - Stucki error diffusion
+- `burkes` - Burkes error diffusion
+- `sierra3` - Sierra-3 (original)
+- `sierra2` - Sierra-2 (reduced)
+- `sierra2-4a` - Sierra-2-4A (lightweight)
+- `ordered` - Bayer matrix ordered dithering
+- `random-rgb` - Random dithering (per-channel)
+- `random-bw` - Random dithering (black & white)
+- `quantize` - Color quantization only (no dithering)
+
+#### Performance
+
+The Rust implementation is **10-50x faster** than the JavaScript version:
+- No garbage collection pauses
+- Native code execution
+- Optimized memory layout
+- Single standalone binary (3-5 MB)
+
+## Dithering Options (JavaScript)
 
 | Option                   | Type             | Default          | Description                                                                                                                                 |
 | ------------------------ | ---------------- | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
