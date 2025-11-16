@@ -13,6 +13,9 @@
   "scripts": {
     "build": "vite build",
     "prepare": "npm run build",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest --coverage",
     "examples:dev": "vite --config examples/vite.config.js",
     "build:examples": "vite build --config examples/vite.config.js && cp examples/example-dither.jpg dist/examples/example-dither.jpg",
     "predeploy": "npm run build:examples",
@@ -23,8 +26,13 @@
     "dist"
   ],
   "devDependencies": {
+    "@vitest/coverage-v8": "^1.0.0",
+    "@vitest/ui": "^1.0.0",
     "gh-pages": "^6.3.0",
+    "happy-dom": "^12.0.0",
+    "jsdom": "^27.2.0",
     "typescript": "^5.0.0",
-    "vite": "^5.0.0"
+    "vite": "^5.0.0",
+    "vitest": "^1.0.0"
   }
 }
