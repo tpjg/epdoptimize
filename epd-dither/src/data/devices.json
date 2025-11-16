@@ -136,6 +136,23 @@
         "scaling_algorithm": "lanczos3"
       }
     },
+    "samsung-emdx-32": {
+      "name": "32\" Samsung EM32DX EMDX (Smart Signage)",
+      "display_technology": "Spectra 6",
+      "size_inches": 32.0,
+      "resolution": {
+        "width": 2560,
+        "height": 1440
+      },
+      "ppi": 92,
+      "palette": "spectra6",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
     "acep-5.65": {
       "name": "5.65\" E Ink ACeP Gallery (7-Color)",
       "display_technology": "ACeP (Gallery)",
