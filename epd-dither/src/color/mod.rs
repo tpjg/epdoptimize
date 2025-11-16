@@ -4,6 +4,9 @@ pub mod convert;
 pub mod distance;
 pub mod palette;
 
+#[cfg(test)]
+mod tests;
+
 pub use palette::Palette;
 
 /// RGB color (8-bit per channel)
