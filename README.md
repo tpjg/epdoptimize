@@ -33,8 +33,11 @@ You can easily add your own displays and use custom color tables.
 
 ## Features
 
-- **Dithering Algorithms:** Multiple high-quality dithering options to improve color blending and gradients.
-- **Color Calibration:** Match device-specific color characteristics for more accurate results.
+- **Device Presets:** Built-in configurations for popular e-ink displays with automatic resolution and palette selection
+- **Smart Resizing:** Automatic image scaling to match device resolution before dithering for optimal quality
+- **Fit Modes:** Letterbox, crop, fill, and contain options for handling aspect ratios
+- **Dithering Algorithms:** Multiple high-quality dithering options to improve color blending and gradients
+- **Color Calibration:** Match device-specific color characteristics for more accurate results
 
 ## Installation
 
@@ -105,6 +108,71 @@ const prepared = replaceColors(ditheredCanvas,ditheredCanvasWithDeviceColors {
 ```
 
 ### Rust CLI
+
+#### Device Presets (Recommended)
+
+The easiest way to prepare images is using device presets, which automatically configure resolution, palette, and optimal settings:
+
+```bash
+# List all available devices
+epd-dither --list-devices
+
+# Process image for a specific device (auto-resizes to device resolution)
+epd-dither -i photo.jpg -o output.png --device spectra6-7.3
+
+# Process for 13.3" Spectra 6 display (1600×1200)
+epd-dither -i photo.jpg -o output.png --device spectra6-13.3 --verbose
+
+# Process for ACeP Gallery display
+epd-dither -i photo.jpg -o output.png --device acep-7.3
+```
+
+**Supported Devices:**
+- **Spectra 6**: 4.0", 5.65", 7.3", 8.14", 10.3", 13.3", 25.3", 31.5" displays (6-color)
+- **ACeP/Gallery**: 5.65", 7.3", 13.3" displays (7-color)
+- **Carta**: 6.0", 10.3", 13.3" displays (e-readers, monochrome high-res)
+- **Waveshare**: 7.5" 3-color displays
+
+#### Image Scaling Options
+
+When processing images for specific resolutions, you can control how they're resized:
+
+```bash
+# Letterbox mode (default) - adds borders to preserve aspect ratio
+epd-dither -i photo.jpg -o output.png \
+  --target-width 800 --target-height 480 \
+  --fit-mode letterbox \
+  --letterbox-color "#ffffff"
+
+# Crop mode - fills display by cropping edges
+epd-dither -i photo.jpg -o output.png \
+  --target-width 1600 --target-height 1200 \
+  --fit-mode crop
+
+# Fill mode - stretches to fill (may distort aspect ratio)
+epd-dither -i photo.jpg -o output.png \
+  --target-width 800 --target-height 480 \
+  --fit-mode fill
+
+# Contain mode - fits within bounds without borders
+epd-dither -i photo.jpg -o output.png \
+  --target-width 800 --target-height 480 \
+  --fit-mode contain
+```
+
+**Scaling Algorithms:**
+- `lanczos3` (default) - Best quality for photos, slightly slower
+- `catmull-rom` - Good balance of quality and speed
+- `gaussian` - Smooth results
+- `triangle` - Faster, medium quality
+- `nearest` - Fastest, lowest quality
+
+```bash
+# Use different scaling algorithm
+epd-dither -i photo.jpg -o output.png \
+  --device spectra6-7.3 \
+  --scaling-algorithm catmull-rom
+```
 
 #### Basic Usage
 

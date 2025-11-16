@@ -4,10 +4,14 @@
 //! e-ink displays with limited color palettes.
 
 pub mod color;
+pub mod device;
 pub mod dither;
+pub mod scaling;
 
 pub use color::{Palette, Rgb, Rgba};
+pub use device::{DeviceManager, DeviceSpec};
 pub use dither::{DitherOptions, DitheringAlgorithm, ErrorDiffusionKernel};
+pub use scaling::{FitMode, ScalingFilter};
 
 /// Process an image with the given dithering options
 pub fn process_image(
