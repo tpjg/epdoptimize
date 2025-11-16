@@ -1,0 +1,276 @@
+{
+  "devices": {
+    "spectra6-4.0": {
+      "name": "4.0\" E Ink Spectra 6",
+      "display_technology": "Spectra 6",
+      "size_inches": 4.0,
+      "resolution": {
+        "width": 640,
+        "height": 400
+      },
+      "ppi": 150,
+      "palette": "spectra6",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "spectra6-5.65": {
+      "name": "5.65\" E Ink Spectra 6",
+      "display_technology": "Spectra 6",
+      "size_inches": 5.65,
+      "resolution": {
+        "width": 600,
+        "height": 448
+      },
+      "ppi": 150,
+      "palette": "spectra6",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "spectra6-7.3": {
+      "name": "7.3\" E Ink Spectra 6 (Picture Frame)",
+      "display_technology": "Spectra 6",
+      "size_inches": 7.3,
+      "resolution": {
+        "width": 800,
+        "height": 480
+      },
+      "ppi": 200,
+      "palette": "spectra6",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "spectra6-8.14": {
+      "name": "8.14\" E Ink Spectra 6",
+      "display_technology": "Spectra 6",
+      "size_inches": 8.14,
+      "resolution": {
+        "width": 1024,
+        "height": 576
+      },
+      "ppi": 144,
+      "palette": "spectra6",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "spectra6-10.3": {
+      "name": "10.3\" E Ink Spectra 6",
+      "display_technology": "Spectra 6",
+      "size_inches": 10.3,
+      "resolution": {
+        "width": 1872,
+        "height": 1404
+      },
+      "ppi": 227,
+      "palette": "spectra6",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "spectra6-13.3": {
+      "name": "13.3\" E Ink Spectra 6 (Reflection Frame, Aura Ink)",
+      "display_technology": "Spectra 6",
+      "size_inches": 13.3,
+      "resolution": {
+        "width": 1600,
+        "height": 1200
+      },
+      "ppi": 200,
+      "palette": "spectra6",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "spectra6-25.3": {
+      "name": "25.3\" E Ink Spectra 6 (Poster)",
+      "display_technology": "Spectra 6",
+      "size_inches": 25.3,
+      "resolution": {
+        "width": 2560,
+        "height": 1600
+      },
+      "ppi": 120,
+      "palette": "spectra6",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "spectra6-31.5": {
+      "name": "31.5\" E Ink Spectra 6 (Fraimic, Large Poster)",
+      "display_technology": "Spectra 6",
+      "size_inches": 31.5,
+      "resolution": {
+        "width": 2560,
+        "height": 1440
+      },
+      "ppi": 94,
+      "palette": "spectra6",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "samsung-emdx-32": {
+      "name": "32\" Samsung EM32DX EMDX (Smart Signage)",
+      "display_technology": "Spectra 6",
+      "size_inches": 32.0,
+      "resolution": {
+        "width": 2560,
+        "height": 1440
+      },
+      "ppi": 92,
+      "palette": "spectra6",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "acep-5.65": {
+      "name": "5.65\" E Ink ACeP Gallery (7-Color)",
+      "display_technology": "ACeP (Gallery)",
+      "size_inches": 5.65,
+      "resolution": {
+        "width": 600,
+        "height": 448
+      },
+      "ppi": 150,
+      "palette": "acep",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "acep-7.3": {
+      "name": "7.3\" E Ink ACeP Gallery (7-Color)",
+      "display_technology": "ACeP (Gallery)",
+      "size_inches": 7.3,
+      "resolution": {
+        "width": 800,
+        "height": 480
+      },
+      "ppi": 200,
+      "palette": "acep",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "acep-13.3": {
+      "name": "13.3\" E Ink ACeP Gallery 3 (7-Color)",
+      "display_technology": "ACeP Gallery 3",
+      "size_inches": 13.3,
+      "resolution": {
+        "width": 1600,
+        "height": 1200
+      },
+      "ppi": 200,
+      "palette": "acep",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "carta-6.0": {
+      "name": "6.0\" E Ink Carta (E-Reader, Kindle)",
+      "display_technology": "Carta 1200",
+      "size_inches": 6.0,
+      "resolution": {
+        "width": 1448,
+        "height": 1072
+      },
+      "ppi": 300,
+      "palette": "default",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "carta-10.3": {
+      "name": "10.3\" E Ink Carta (E-Reader, reMarkable)",
+      "display_technology": "Carta 1000",
+      "size_inches": 10.3,
+      "resolution": {
+        "width": 1872,
+        "height": 1404
+      },
+      "ppi": 227,
+      "palette": "default",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "carta-13.3": {
+      "name": "13.3\" E Ink Carta (Large E-Reader)",
+      "display_technology": "Carta 1200",
+      "size_inches": 13.3,
+      "resolution": {
+        "width": 2200,
+        "height": 1650
+      },
+      "ppi": 207,
+      "palette": "default",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    },
+    "waveshare-7.5-bwr": {
+      "name": "7.5\" Waveshare (Black/White/Red)",
+      "display_technology": "3-Color",
+      "size_inches": 7.5,
+      "resolution": {
+        "width": 800,
+        "height": 480
+      },
+      "ppi": 167,
+      "palette": "default",
+      "recommended_settings": {
+        "algorithm": "floyd-steinberg",
+        "serpentine": true,
+        "fit_mode": "letterbox",
+        "scaling_algorithm": "lanczos3"
+      }
+    }
+  }
+}
